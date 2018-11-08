@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Index</title>
+</head>
+<body>
+    <style>
+        .slidecontainer {
+            width: 100%; /* Width of the outside container */
+        }
+
+        /* The slider itself */
+        .slider {
+            -webkit-appearance: none;  /* Override default CSS styles */
+            appearance: none;
+            width: 100%; /* Full-width */
+            height: 25px; /* Specified height */
+            background: #d3d3d3; /* Grey background */
+            outline: none; /* Remove outline */
+            opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
+            -webkit-transition: .2s; /* 0.2 seconds transition on hover */
+            transition: opacity .2s;
+        }
+
+        /* Mouse-over effects */
+        .slider:hover {
+            opacity: 1; /* Fully shown on mouse-over */
+        }
+
+        /* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none; /* Override default look */
+            appearance: none;
+            width: 25px; /* Set a specific slider handle width */
+            height: 25px; /* Slider handle height */
+            background: #4CAF50; /* Green background */
+            cursor: pointer; /* Cursor on hover */
+        }
+
+        .slider::-moz-range-thumb {
+            width: 25px; /* Set a specific slider handle width */
+            height: 25px; /* Slider handle height */
+            background: #4CAF50; /* Green background */
+            cursor: pointer; /* Cursor on hover */
+        }
+    </style>
+    <table>
+        <tr>
+            <td width="20%">
+
+            </td>
+            <td width="30%">
+                <img src="{{ url_for('static', filename='left.jpg') }}" alt="Left Image">
+            </td>
+            <td width="30%">
+                <img src="{{ url_for('static', filename='right.jpg') }}" alt="User Image">
+            </td>
+            <td width="20%">
+                
+            </td>
+        </tr>
+    </table>
+    <br><br>
+    <table>
+        <tr>
+            <td width="20%">
+
+            </td>
+            <td width="30%">
+                <form method="POST">
+                    <div class="slidecontainer">
+                        <label for="minDisparity">minDisparity: </label><input type="range" min="0" max="100" value="0" class="slider" id="minDisparity">
+                        <label for="numDisparities">numDisparities: </label><input type="range" step="16" min="0" max="320" value="80" class="slider" id="numDisparities">
+                        <label for="windowSize">windowSize: </label><input type="range" min="0" max="20" value="3" class="slider" id="windowSize">
+                        <label for="blockSize">blockSize: </label><input type="range" min="0" max="100" value="5" class="slider" id="blockSize">
+                        <label for="disp12MaxDiff">disp12MaxDiff: </label><input type="range" min="0" max="50" value="1" class="slider" id="disp12MaxDiff">
+                        <label for="uniquenessRatio">uniquenessRatio: </label><input type="range" min="0" max="50" value="15" class="slider" id="uniquenessRatio">
+                        <label for="speckleWindowSize">speckleWindowSize: </label><input type="range" min="0" max="50" value="0" class="slider" id="speckleWindowSize">
+                        <label for="speckleRange">speckleRange: </label><input type="range" min="0" max="50" value="2" class="slider" id="speckleRange">
+                        <label for="preFilterCap">preFilterCap: </label><input type="range" min="0" max="200" value="63" class="slider" id="preFilterCap">
+                    </div>
+                </form>
+            </td>
+            <td width="30%">
+                <img id="resultimg" src="{{ url_for('static', filename='result.jpg') }}" alt="User Image">
+            </td>
+            <td width="20%">
+                
+            </td>
+        </tr>
+    </table>
+    <script
+			  src="https://code.jquery.com/jquery-3.3.1.min.js"
+			  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+			  crossorigin="anonymous"></script>
+    <script>
+
+        // Update the current slider value (each time you drag the slider handle)
+
+        $( document ).ready(function(){
+            $.ajax({
+            type: 'POST',
+            url: "/update",
+            data: {'minDisparity': $("#minDisparity").val(),
+                    'numDisparities': $("#numDisparities").val(),
+                    'windowSize': $("#windowSize").val(),
+                    'blockSize': $("#blockSize").val(),
+                    'disp12MaxDiff': $("#disp12MaxDiff").val(),
+                    'uniquenessRatio': $("#uniquenessRatio").val(),
+                    'speckleWindowSize': $("#speckleWindowSize").val(),
+                    'speckleRange': $("#speckleRange").val(),
+                    'preFilterCap': $("#preFilterCap").val(),
+                    },
+            dataType: "text",
+            success: function(data){
+                        console.log(data);
+                        var tStamp = Math.random()
+                        var filename = '/static/result.jpg?t='+ tStamp
+                        console.log(filename)
+                        $("#resultimg").removeAttr("src").attr("src", filename);
+                    }
+            });
+        });
+        $(".slider").change(function(){
+            $.ajax({
+            type: 'POST',
+            url: "/update",
+            data: {'minDisparity': $("#minDisparity").val(),
+                    'numDisparities': $("#numDisparities").val(),
+                    'windowSize': $("#windowSize").val(),
+                    'blockSize': $("#blockSize").val(),
+                    'disp12MaxDiff': $("#disp12MaxDiff").val(),
+                    'uniquenessRatio': $("#uniquenessRatio").val(),
+                    'speckleWindowSize': $("#speckleWindowSize").val(),
+                    'speckleRange': $("#speckleRange").val(),
+                    'preFilterCap': $("#preFilterCap").val(),
+                    },
+            dataType: "text",
+            success: function(data){
+                        console.log(data);
+                        var tStamp = Math.random()
+                        var filename = '/static/result.jpg?t='+ tStamp
+                        console.log(filename)
+                        $("#resultimg").removeAttr("src").attr("src", filename);
+                    }
+            });
+        });
+    </script>
+</body>
+</html>
